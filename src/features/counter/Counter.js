@@ -1,26 +1,30 @@
-import React, { useState } from "react";
+import React from "react"; //{ useState }
 import { useSelector, useDispatch } from "react-redux";
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
+/* import {
+  //decrement,
+  //increment,
+  //incrementByAmount,
+  //incrementAsync,
   selectCount,
-} from "./counterSlice";
+} from "./counterSlice"; */
 import styles from "./Counter.module.css";
 
-import { login, activeUser, logout } from "../../app/slices/userSlice";
+import { login, activeUser, logout, loggedIn } from "../../app/slices/user";
+
+import { get, local, create } from "../../app/slices/despesas";
 
 export function Counter() {
-  const count = useSelector(selectCount);
+  //const count = useSelector(selectCount);
   const user = useSelector(activeUser);
+  const _local = useSelector(local);
+  const signedIn = useSelector(loggedIn);
   const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState("2");
+  //const [incrementAmount, setIncrementAmount] = useState("2");
 
   return (
     <div>
       <div className={styles.row}>
-        <button
+        {/*  <button
           className={styles.button}
           aria-label="Increment value"
           onClick={() => dispatch(increment())}
@@ -34,10 +38,10 @@ export function Counter() {
           onClick={() => dispatch(decrement())}
         >
           -
-        </button>
+        </button> */}
       </div>
       <div className={styles.row}>
-        <input
+        {/* <input
           className={styles.textbox}
           aria-label="Set increment amount"
           value={incrementAmount}
@@ -56,9 +60,9 @@ export function Counter() {
           onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
         >
           Add Async
-        </button>
+        </button> */}
 
-        {user && <div>{user.displayName}</div>}
+        {signedIn && <div>{user.displayName}</div>}
 
         <button
           onClick={() => {
@@ -74,6 +78,30 @@ export function Counter() {
           }}
         >
           logout
+        </button>
+
+        <button
+          onClick={() => {
+            dispatch(get());
+          }}
+        >
+          get despesas
+        </button>
+
+        <button
+          onClick={() => {
+            console.log(_local);
+          }}
+        >
+          local
+        </button>
+
+        <button
+          onClick={() => {
+            dispatch(create(""));
+          }}
+        >
+          add
         </button>
       </div>
     </div>

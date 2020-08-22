@@ -48,6 +48,8 @@ const logout = () => (dispatch) => {
 
 const activeUser = (state) => state.user.user;
 
-export { login, logout, activeUser };
+const loggedIn = (state) => state.user.signedIn;
+
+export { login, logout, activeUser, loggedIn };
 
 export default userSlice.reducer;
