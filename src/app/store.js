@@ -1,12 +1,17 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "../features/counter/counterSlice";
-import userReducer from "./slices/user";
-import despesasReducer from "./slices/despesas";
+
+/* reducers */
+
+import counter from "../features/counter/counterSlice";
+import user from "./slices/user";
+import despesas from "./slices/despesas";
+import receitas from "./slices/receitas";
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
-    user: userReducer,
-    despesas: despesasReducer,
+    counter,
+    user,
+    despesas,
+    receitas,
   },
 });
