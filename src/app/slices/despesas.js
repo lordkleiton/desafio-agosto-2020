@@ -1,47 +1,31 @@
-import { createSlice } from "@reduxjs/toolkit";
 import { firestore } from "../firebase";
 import firebase from "firebase";
 import { generateSlice } from "./helpers/generate_slices";
 
+/* configs */
+
+const _model = "despesas";
+
+const _db = () => firestore().collection(_model);
+
 /* slice */
 
-const model = "despesas";
+const _slice = generateSlice(_model);
 
-const db = () => firestore().collection(model);
+const { actions, reducer } = _slice;
 
-const initialState = {
-  local: {},
-  loading: false,
-};
-
-const slice = createSlice({
-  name: model,
-  initialState,
-  reducers: {
-    addToLocal: (state, { payload }) => {
-      state.local[payload.id] = payload;
-    },
-    removeFromLocal: (state, { payload }) => {
-      delete state.local[payload];
-    },
-    toggleLoading: (state) => {
-      state.loading = !state.loading;
-    },
-  },
-});
-
-const { addToLocal, removeFromLocal } = slice.actions;
+const { addToLocal, removeFromLocal } = actions;
 
 /* getters */
 
-const local = (state) => state[model].local;
+const local = (state) => state[_model].local;
 
-const loading = (state) => state[model].loading;
+const loading = (state) => state[_model].loading;
 
 /* operações */
 
 const _get = (id) => (dispatch) => {
-  db()
+  _db()
     .doc(id)
     .get()
     .then((doc) => {
@@ -51,7 +35,7 @@ const _get = (id) => (dispatch) => {
 };
 
 const find = () => (dispatch) => {
-  db()
+  _db()
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
@@ -62,7 +46,7 @@ const find = () => (dispatch) => {
 };
 
 const create = (data) => (dispatch) => {
-  db()
+  _db()
     .add(_toModel(10, "blablabla", new Date(), false))
     .then((newDoc) => {
       newDoc.get().then((doc) => {
@@ -73,7 +57,7 @@ const create = (data) => (dispatch) => {
 };
 
 const remove = (id) => (dispatch) => {
-  db()
+  _db()
     .doc(id)
     .delete()
     .then(() => {
@@ -83,7 +67,7 @@ const remove = (id) => (dispatch) => {
 };
 
 const update = (id) => (dispatch) => {
-  db()
+  _db()
     .doc(id)
     .update(_toModel(155, "umu", new Date(), false))
     .then(() => {
@@ -115,4 +99,4 @@ const _toModel = (valor, descricao, data, pago) => ({
 
 export { local, remove, create, update, loading, find };
 
-export default slice.reducer;
+export default reducer;
