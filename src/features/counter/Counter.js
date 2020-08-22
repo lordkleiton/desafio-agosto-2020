@@ -11,7 +11,7 @@ import styles from "./Counter.module.css";
 
 import { login, activeUser, logout, loggedIn } from "../../app/slices/user";
 
-import { get, local, create } from "../../app/slices/despesas";
+import { get, local, create, update } from "../../app/slices/despesas";
 
 export function Counter() {
   //const count = useSelector(selectCount);
@@ -102,6 +102,14 @@ export function Counter() {
           }}
         >
           add
+        </button>
+
+        <button
+          onClick={() => {
+            dispatch(update("DciXzaJWWdHYWund7srd"));
+          }}
+        >
+          patch 'DciXzaJWWdHYWund7srd'
         </button>
       </div>
     </div>

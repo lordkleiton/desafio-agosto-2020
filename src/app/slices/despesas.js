@@ -8,10 +8,7 @@ const db = () => firestore().collection(model);
 
 const initialState = {
   local: {},
-  createLoading: false,
-  getLoading: false,
-  patchLoading: false,
-  deleteLoading: false,
+  loading: false,
 };
 
 const slice = createSlice({
@@ -24,20 +21,19 @@ const slice = createSlice({
     removeFromLocal: (state, { payload }) => {
       delete state.local[payload];
     },
-    toggleCreateLoading: (state) => {
-      state.createLoading = !state.createLoading;
-    },
-    toggleGetLoading: (state) => {
-      state.getLoading = !state.getLoading;
+    toggleLoading: (state) => {
+      state.loading = !state.loading;
     },
   },
 });
 
-const { addToLocal, removeFromLocal } = slice.actions;
+const { addToLocal, removeFromLocal, toggleLoading } = slice.actions;
 
 /* getters */
 
 const local = (state) => state[model].local;
+
+const loading = (state) => state[model].loading;
 
 /* operações */
 
@@ -48,7 +44,7 @@ const get = () => (dispatch) => {
       snapshot.forEach((doc) => {
         const data = { id: doc.id, ...doc.data() };
 
-        dispatch(addToLocal(JSON.parse(JSON.stringify(data))));
+        dispatch(addToLocal(serialize(data)));
       });
     })
     .catch((e) => {
@@ -75,7 +71,7 @@ const create = () => (dispatch) => {
       newDoc.get().then((doc) => {
         const data = { id: doc.id, ...doc.data() };
 
-        dispatch(addToLocal(JSON.parse(JSON.stringify(data))));
+        dispatch(addToLocal(serialize(data)));
       });
     })
     .catch((e) => {
@@ -83,7 +79,31 @@ const create = () => (dispatch) => {
     });
 };
 
+const update = (id) => (dispatch) => {
+  db()
+    .doc(id)
+    .update(toModel(155, "uwu", new Date(), false))
+    .then(() => {
+      db()
+        .doc(id)
+        .get()
+        .then((doc) => {
+          const data = { id: doc.id, ...doc.data() };
+
+          dispatch(addToLocal(serialize(data)));
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+};
+
 /* utils */
+
+const serialize = (data) => JSON.parse(JSON.stringify(data));
 
 const toModel = (valor, descricao, data, pago) => ({
   valor: parseFloat(valor),
@@ -94,6 +114,6 @@ const toModel = (valor, descricao, data, pago) => ({
 
 /* exports */
 
-export { get, local, remove, create };
+export { get, local, remove, create, update, loading };
 
 export default slice.reducer;
