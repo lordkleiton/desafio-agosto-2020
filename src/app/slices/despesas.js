@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { firestore } from "../firebase";
 import firebase from "firebase";
+import { generateSlice } from "./helpers/generate_slices";
+
+/* slice */
 
 const model = "despesas";
 
@@ -27,7 +30,7 @@ const slice = createSlice({
   },
 });
 
-const { addToLocal, removeFromLocal, toggleLoading } = slice.actions;
+const { addToLocal, removeFromLocal } = slice.actions;
 
 /* getters */
 
@@ -37,19 +40,36 @@ const loading = (state) => state[model].loading;
 
 /* operações */
 
-const get = () => (dispatch) => {
+const _get = (id) => (dispatch) => {
+  db()
+    .doc(id)
+    .get()
+    .then((doc) => {
+      _addDocToStore(doc, dispatch);
+    })
+    .catch(_onError);
+};
+
+const find = () => (dispatch) => {
   db()
     .get()
     .then((snapshot) => {
       snapshot.forEach((doc) => {
-        const data = { id: doc.id, ...doc.data() };
-
-        dispatch(addToLocal(serialize(data)));
+        _addDocToStore(doc, dispatch);
       });
     })
-    .catch((e) => {
-      console.log(e);
-    });
+    .catch(_onError);
+};
+
+const create = (data) => (dispatch) => {
+  db()
+    .add(_toModel(10, "blablabla", new Date(), false))
+    .then((newDoc) => {
+      newDoc.get().then((doc) => {
+        _addDocToStore(doc, dispatch);
+      });
+    })
+    .catch(_onError);
 };
 
 const remove = (id) => (dispatch) => {
@@ -59,53 +79,32 @@ const remove = (id) => (dispatch) => {
     .then(() => {
       dispatch(removeFromLocal(id));
     })
-    .catch((e) => {
-      console.log(e);
-    });
-};
-
-const create = () => (dispatch) => {
-  db()
-    .add(toModel(10, "blablabla", new Date(), false))
-    .then((newDoc) => {
-      newDoc.get().then((doc) => {
-        const data = { id: doc.id, ...doc.data() };
-
-        dispatch(addToLocal(serialize(data)));
-      });
-    })
-    .catch((e) => {
-      console.log(e);
-    });
+    .catch(_onError);
 };
 
 const update = (id) => (dispatch) => {
   db()
     .doc(id)
-    .update(toModel(155, "uwu", new Date(), false))
+    .update(_toModel(155, "umu", new Date(), false))
     .then(() => {
-      db()
-        .doc(id)
-        .get()
-        .then((doc) => {
-          const data = { id: doc.id, ...doc.data() };
-
-          dispatch(addToLocal(serialize(data)));
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      dispatch(_get(id));
     })
-    .catch((e) => {
-      console.log(e);
-    });
+    .catch(_onError);
 };
 
 /* utils */
 
-const serialize = (data) => JSON.parse(JSON.stringify(data));
+const _onError = (e) => console.log(e);
 
-const toModel = (valor, descricao, data, pago) => ({
+const _addDocToStore = (doc, dispatch) => {
+  const data = { id: doc.id, ...doc.data() };
+
+  dispatch(addToLocal(_serialize(data)));
+};
+
+const _serialize = (data) => JSON.parse(JSON.stringify(data));
+
+const _toModel = (valor, descricao, data, pago) => ({
   valor: parseFloat(valor),
   descricao,
   data: firebase.firestore.Timestamp.fromDate(data),
@@ -114,6 +113,6 @@ const toModel = (valor, descricao, data, pago) => ({
 
 /* exports */
 
-export { get, local, remove, create, update, loading };
+export { local, remove, create, update, loading, find };
 
 export default slice.reducer;

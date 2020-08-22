@@ -11,7 +11,7 @@ import styles from "./Counter.module.css";
 
 import { login, activeUser, logout, loggedIn } from "../../app/slices/user";
 
-import { get, local, create, update } from "../../app/slices/despesas";
+import { find, local, create, update } from "../../app/slices/despesas";
 
 export function Counter() {
   //const count = useSelector(selectCount);
@@ -82,7 +82,7 @@ export function Counter() {
 
         <button
           onClick={() => {
-            dispatch(get());
+            dispatch(find());
           }}
         >
           get despesas
