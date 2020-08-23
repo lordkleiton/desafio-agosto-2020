@@ -7,9 +7,13 @@ import { Despesas } from "./views/despesas";
 import { Receitas } from "./views/receitas";
 import { Info } from "./views/info";
 
+import CssBaseline from "@material-ui/core/CssBaseline";
+
 function App() {
   return (
     <Router>
+      <CssBaseline />
+
       <Switch>
         <Route exact path="/">
           <Home />
