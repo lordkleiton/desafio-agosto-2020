@@ -5,6 +5,8 @@ import { Home } from "./views/home";
 import { Login } from "./views/login";
 import { CheckAuth } from "./views/checkAuth";
 import { Despesas } from "./views/despesas";
+import { Receitas } from "./views/receitas";
+import { Info } from "./views/info";
 
 function App() {
   return (
@@ -18,6 +20,12 @@ function App() {
         </Route>
         <CheckAuth path="/despesas">
           <Despesas />
+        </CheckAuth>
+        <CheckAuth path="/receitas">
+          <Receitas />
+        </CheckAuth>
+        <CheckAuth path="/info">
+          <Info />
         </CheckAuth>
       </Switch>
     </Router>

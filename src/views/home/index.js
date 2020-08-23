@@ -18,7 +18,6 @@ const Home = () => {
       {signedIn && (
         <div>
           <div>{user.displayName}</div>
-          <Link to="/login">Login</Link>
         </div>
       )}
     </div>
