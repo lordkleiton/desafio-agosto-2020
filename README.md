@@ -1,8 +1,8 @@
 # Desafio
 
-Desenvolva e implante (deploy) um gerenciador de contas a pagar, no qual deve ser
-possível realizar operações CRUD (criação, listagem, atualização, remoção) sobre a
-seguinte entidade de Despesa.
+- [x] Desenvolva e implante (deploy) um gerenciador de contas a pagar, no qual deve ser
+      possível realizar operações CRUD (criação, listagem, atualização, remoção) sobre a
+      seguinte entidade de Despesa.
 
 - valor: number
 - descricao: string
@@ -18,24 +18,24 @@ seguinte entidade de Despesa.
 
 - [x] Redux
 - [x] Firebase Firestore
-- Firebase Hosting
-- Formik
-- Material-UI ou styled-components
-- React Router
+- [ ] Firebase Hosting
+- [ ] Formik
+- [ ] Material-UI ou styled-components
+- [ ] React Router
 
 ## Extras
 
-Faça também um CRUD para uma entidade Receita.
+- [x] Faça também um CRUD para uma entidade Receita.
 
 - valor: number
 - descricao: string
 - data: timestamp
 - recebido: bool
 
-Crie uma tela de acompanhamento com informações como saldo e total de Receitas e Despesas no mês atual, gráficos, e informações que achar interessante.
+- [ ] Crie uma tela de acompanhamento com informações como saldo e total de Receitas e Despesas no mês atual, gráficos, e informações que achar interessante.
 
-Implemente autenticação de usuários no sistema (recomendamos o Authentication
-do Firebase).
+- [x] Implemente autenticação de usuários no sistema (recomendamos o Authentication
+      do Firebase).
 
 ---
 
