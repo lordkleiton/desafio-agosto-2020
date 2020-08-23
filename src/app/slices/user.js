@@ -23,12 +23,14 @@ const userSlice = createSlice({
 
 const { setUser, setSignedIn, reset } = userSlice.actions;
 
-const login = () => (dispatch) => {
+const login = (onSuccess) => (dispatch) => {
   localAuth()
     .signInWithPopup(new auth.GoogleAuthProvider())
     .then((r) => {
       dispatch(setUser(JSON.parse(JSON.stringify(r.user))));
       dispatch(setSignedIn(true));
+
+      if (onSuccess) onSuccess();
     })
     .catch((e) => {
       console.log(e);
