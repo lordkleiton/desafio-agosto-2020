@@ -15,7 +15,12 @@ const Home = () => {
           <Link to="/login">Login</Link>
         </div>
       )}
-      {signedIn && <div>{user.displayName}</div>}
+      {signedIn && (
+        <div>
+          <div>{user.displayName}</div>
+          <Link to="/login">Login</Link>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { login, activeUser, loggedIn } from "../../app/slices/user";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const Login = () => {
+  const history = useHistory();
+
   const user = useSelector(activeUser);
   const signedIn = useSelector(loggedIn);
   const dispatch = useDispatch();
@@ -18,7 +20,7 @@ const Login = () => {
         <button
           onClick={() => {
             const onSuccess = () => {
-              console.log("logado com sucesso");
+              history.replace("/");
             };
 
             dispatch(login(onSuccess));
