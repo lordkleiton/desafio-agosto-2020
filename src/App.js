@@ -15,18 +15,22 @@ function App() {
       <CssBaseline />
 
       <Switch>
-        <Route exact path="/">
+        <CheckAuth exact path="/">
           <Home />
-        </Route>
+        </CheckAuth>
+
         <Route path="/login">
           <Login />
         </Route>
+
         <CheckAuth path="/despesas">
           <Despesas />
         </CheckAuth>
+
         <CheckAuth path="/receitas">
           <Receitas />
         </CheckAuth>
+
         <CheckAuth path="/info">
           <Info />
         </CheckAuth>
