@@ -10,11 +10,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 
 const CustomForm = ({ initialData, action }) => (
   <Formik
-    initialValues={
-      initialData
-        ? initialData
-        : { valor: 0, pago: false, descricao: "", data: "" }
-    }
+    initialValues={initialData}
     validate={(values) => {
       const errors = {};
 

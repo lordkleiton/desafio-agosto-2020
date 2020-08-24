@@ -30,6 +30,7 @@ const Despesas = () => {
   const classes = useStyles();
   const _local = useSelector(local);
   const loading = useSelector(_loading);
+  const createData = { valor: 0, pago: false, descricao: "", data: "" };
   const toMoment = (seconds, nanoseconds) =>
     moment(seconds * 1000 + nanoseconds / 1000);
 
@@ -83,6 +84,7 @@ const Despesas = () => {
         open={createDialogOpen}
         handleClose={toggleCreateDialog}
         title="Nova despesa"
+        initialData={createData}
       />
 
       <CustomDialog
