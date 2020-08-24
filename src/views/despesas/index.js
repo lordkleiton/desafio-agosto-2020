@@ -21,6 +21,7 @@ import {
 import { Edit, Delete } from "@material-ui/icons";
 import moment from "moment";
 import { CustomDialog } from "../../components/custom_dialog";
+import { formatCurrency } from "../../helpers";
 
 const Despesas = () => {
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
@@ -69,7 +70,7 @@ const Despesas = () => {
             dispatch(find());
           }}
         >
-          atualizar
+          sincronizar
         </Button>
       )}
 
@@ -105,7 +106,7 @@ const Despesas = () => {
             <Card>
               <CardContent className={classes.card}>
                 <Typography variant="h5" component="h2">
-                  {d.valor}
+                  {formatCurrency(d.valor)}
                 </Typography>
                 <Typography
                   className={classes.title}
