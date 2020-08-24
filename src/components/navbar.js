@@ -7,34 +7,22 @@ import { loggedIn } from "../app/slices/user";
 const NavBar = () => {
   const history = useHistory();
   const signedIn = useSelector(loggedIn);
+  const routes = ["despesas", "receitas", "info"];
 
   return signedIn ? (
     <AppBar position="static">
       <Toolbar>
-        <Button
-          color="inherit"
-          onClick={() => {
-            history.push("/despesas");
-          }}
-        >
-          despesas
-        </Button>
-        <Button
-          color="inherit"
-          onClick={() => {
-            history.push("/receitas");
-          }}
-        >
-          receitas
-        </Button>
-        <Button
-          color="inherit"
-          onClick={() => {
-            history.push("/info");
-          }}
-        >
-          informações
-        </Button>
+        {routes.map((r, i) => (
+          <Button
+            key={i}
+            color="inherit"
+            onClick={() => {
+              history.push(`/${r}`);
+            }}
+          >
+            {r}
+          </Button>
+        ))}
       </Toolbar>
     </AppBar>
   ) : null;
