@@ -120,7 +120,7 @@ const Info = () => {
         {rData.length > 0 && (
           <Grid item>
             <Typography variant="h5" component="h2">
-              Maior despesa:{" "}
+              Maior receita:{" "}
               {formatCurrency(rValues.reduce((a, b) => Math.max(a, b)))}
             </Typography>
           </Grid>
@@ -129,7 +129,7 @@ const Info = () => {
         {rData.length > 0 && (
           <Grid item>
             <Typography variant="h5" component="h2">
-              Menor despesa:{" "}
+              Menor receita:{" "}
               {formatCurrency(rValues.reduce((a, b) => Math.min(a, b)))}
             </Typography>
           </Grid>
@@ -138,7 +138,7 @@ const Info = () => {
         {rData.length > 0 && (
           <Grid item>
             <Typography variant="h5" component="h2">
-              Pagas: {rData.filter((d) => d.pago).length}
+              Recebidas: {rData.filter((d) => d.recebido).length}
             </Typography>
           </Grid>
         )}
@@ -147,7 +147,7 @@ const Info = () => {
           <Grid item>
             <Typography variant="h5" component="h2">
               Pendentes:
-              {rData.filter((d) => !d.pago).length}
+              {rData.filter((d) => !d.recebido).length}
             </Typography>
           </Grid>
         )}
