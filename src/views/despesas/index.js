@@ -8,7 +8,6 @@ import {
   //update,
   find,
 } from "../../app/slices/despesas";
-
 import {
   Button,
   Card,
@@ -18,11 +17,110 @@ import {
   Grid,
   CardActions,
   IconButton,
+  Switch,
+  FormControlLabel,
+  TextField,
 } from "@material-ui/core";
-
 import { Edit, Delete } from "@material-ui/icons";
-
 import moment from "moment";
+import { Formik, Form, ErrorMessage } from "formik";
+
+const DespesasForm = () => (
+  <div>
+    <h1>Any place in your app!</h1>
+    <Formik
+      initialValues={{ valor: 0, pago: false, descricao: "", data: "" }}
+      validate={(values) => {
+        const errors = {};
+
+        const { valor, descricao, data } = values;
+
+        if (valor <= 0) errors.valor = "Valor deve ser maior que 0";
+
+        if (!descricao) errors.descricao = "Descrição obrigatória";
+
+        if (!data) errors.data = "Data obrigatória";
+
+        return errors;
+      }}
+      onSubmit={(values, { setSubmitting }) => {
+        console.log(values);
+
+        setSubmitting(false);
+      }}
+    >
+      {({ isSubmitting, values, handleSubmit, handleChange }) => (
+        <Form>
+          <TextField
+            variant="outlined"
+            name="descricao"
+            label="Descrição"
+            type="text"
+            value={values.descricao}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+          />
+          <ErrorMessage name="descricao" component="div" />
+
+          <TextField
+            variant="outlined"
+            name="valor"
+            label="Valor"
+            type="number"
+            step="0.01"
+            value={values.valor}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+          />
+          <ErrorMessage name="valor" component="div" />
+
+          <TextField
+            variant="outlined"
+            name="data"
+            label="Data"
+            type="datetime-local"
+            value={values.data}
+            onChange={handleChange}
+            InputLabelProps={{
+              shrink: true,
+            }}
+            required
+          />
+          <ErrorMessage name="data" component="div" />
+
+          <FormControlLabel
+            label="Pago?"
+            control={
+              <Switch
+                checked={values.pago}
+                onChange={handleChange}
+                color="primary"
+                name="pago"
+                type="checkbox"
+              />
+            }
+          />
+          <ErrorMessage name="pago" component="div" />
+
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+          >
+            enviar
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  </div>
+);
 
 const useStyles = makeStyles({
   card: {
@@ -65,6 +163,8 @@ const Despesas = () => {
           carregar
         </Button>
       )}
+
+      <DespesasForm />
 
       <Grid container spacing={3} alignItems="center" justify="center">
         {data.map((d) => (
