@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   local,
   loading as _loading,
   remove,
-  //create,
+  create,
   //update,
   find,
 } from "../../app/slices/despesas";
@@ -20,122 +20,16 @@ import {
   Switch,
   FormControlLabel,
   TextField,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@material-ui/core";
 import { Edit, Delete } from "@material-ui/icons";
 import moment from "moment";
 import { Formik, Form, ErrorMessage } from "formik";
 
-const DespesasForm = () => (
-  <div>
-    <h1>Any place in your app!</h1>
-    <Formik
-      initialValues={{ valor: 0, pago: false, descricao: "", data: "" }}
-      validate={(values) => {
-        const errors = {};
-
-        const { valor, descricao, data } = values;
-
-        if (valor <= 0) errors.valor = "Valor deve ser maior que 0";
-
-        if (!descricao) errors.descricao = "Descrição obrigatória";
-
-        if (!data) errors.data = "Data obrigatória";
-
-        return errors;
-      }}
-      onSubmit={(values, { setSubmitting }) => {
-        console.log(values);
-
-        setSubmitting(false);
-      }}
-    >
-      {({ isSubmitting, values, handleSubmit, handleChange }) => (
-        <Form>
-          <TextField
-            variant="outlined"
-            name="descricao"
-            label="Descrição"
-            type="text"
-            value={values.descricao}
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            required
-          />
-          <ErrorMessage name="descricao" component="div" />
-
-          <TextField
-            variant="outlined"
-            name="valor"
-            label="Valor"
-            type="number"
-            step="0.01"
-            value={values.valor}
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            required
-          />
-          <ErrorMessage name="valor" component="div" />
-
-          <TextField
-            variant="outlined"
-            name="data"
-            label="Data"
-            type="datetime-local"
-            value={values.data}
-            onChange={handleChange}
-            InputLabelProps={{
-              shrink: true,
-            }}
-            required
-          />
-          <ErrorMessage name="data" component="div" />
-
-          <FormControlLabel
-            label="Pago?"
-            control={
-              <Switch
-                checked={values.pago}
-                onChange={handleChange}
-                color="primary"
-                name="pago"
-                type="checkbox"
-              />
-            }
-          />
-          <ErrorMessage name="pago" component="div" />
-
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-          >
-            enviar
-          </Button>
-        </Form>
-      )}
-    </Formik>
-  </div>
-);
-
-const useStyles = makeStyles({
-  card: {
-    width: 250,
-    wordBreak: "break-all",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
-  },
-});
-
 const Despesas = () => {
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
   const _local = useSelector(local);
@@ -151,6 +45,14 @@ const Despesas = () => {
     if (v.data) data.push(v);
   }
 
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <div>
       {!loading && (
@@ -160,11 +62,22 @@ const Despesas = () => {
             dispatch(find());
           }}
         >
-          carregar
+          atualizar
         </Button>
       )}
 
-      <DespesasForm />
+      <Button color="inherit" onClick={handleClickOpen}>
+        criar
+      </Button>
+
+      <CustomDialog
+        action={(values) => {
+          dispatch(create(values));
+        }}
+        open={open}
+        handleClose={handleClose}
+        title="Nova despesa"
+      />
 
       <Grid container spacing={3} alignItems="center" justify="center">
         {data.map((d) => (
@@ -189,7 +102,7 @@ const Despesas = () => {
                 </Typography>
               </CardContent>
               <CardActions>
-                <IconButton>
+                <IconButton onClick={() => {}}>
                   <Edit />
                 </IconButton>
                 <IconButton
@@ -205,6 +118,141 @@ const Despesas = () => {
         ))}
       </Grid>
     </div>
+  );
+};
+
+const useStyles = makeStyles({
+  card: {
+    width: 250,
+    wordBreak: "break-all",
+  },
+  title: {
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+});
+
+const CustomForm = ({ initialData, action }) => (
+  <Formik
+    initialValues={
+      initialData
+        ? initialData
+        : { valor: 0, pago: false, descricao: "", data: "" }
+    }
+    validate={(values) => {
+      const errors = {};
+
+      const { valor, descricao, data } = values;
+
+      if (valor <= 0) errors.valor = "Valor deve ser maior que 0";
+
+      if (!descricao) errors.descricao = "Campo obrigatório";
+
+      if (!data) errors.data = "Campo obrigatório";
+
+      return errors;
+    }}
+    onSubmit={(values, { setSubmitting }) => {
+      action(values);
+
+      setSubmitting(false);
+    }}
+  >
+    {({ isSubmitting, values, handleSubmit, handleChange }) => (
+      <Form>
+        <Grid container spacing={3} alignItems="center" justify="center">
+          <Grid xs={6} item>
+            <TextField
+              variant="outlined"
+              name="descricao"
+              label="Descrição"
+              type="text"
+              value={values.descricao}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+            />
+            <ErrorMessage name="descricao" component="div" />
+          </Grid>
+
+          <Grid xs={6} item>
+            <TextField
+              variant="outlined"
+              name="valor"
+              label="Valor"
+              type="number"
+              step="0.01"
+              value={values.valor}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+            />
+            <ErrorMessage name="valor" component="div" />
+          </Grid>
+
+          <Grid xs={6} item>
+            {" "}
+            <TextField
+              variant="outlined"
+              name="data"
+              label="Data"
+              type="datetime-local"
+              value={values.data}
+              onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              required
+            />
+            <ErrorMessage name="data" component="div" />
+          </Grid>
+
+          <Grid xs={6} item>
+            <FormControlLabel
+              label="Pago?"
+              control={
+                <Switch
+                  checked={values.pago}
+                  onChange={handleChange}
+                  color="primary"
+                  name="pago"
+                  type="checkbox"
+                />
+              }
+            />
+            <ErrorMessage name="pago" component="div" />
+          </Grid>
+
+          <Grid xs={6} item></Grid>
+        </Grid>
+
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSubmit}
+          disabled={isSubmitting}
+        >
+          enviar
+        </Button>
+      </Form>
+    )}
+  </Formik>
+);
+
+const CustomDialog = ({ open, handleClose, action, initialData, title }) => {
+  return (
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>{title}</DialogTitle>
+      <DialogContent>
+        <CustomForm action={action} initialData={initialData} />
+      </DialogContent>
+    </Dialog>
   );
 };
 
