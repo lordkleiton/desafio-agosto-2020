@@ -1,3 +1,7 @@
+# URL
+
+[Clique aqui](https://mario-desafio-agosto-2020.web.app)
+
 # Desafio
 
 - [x] Desenvolva e implante (deploy) um gerenciador de contas a pagar, no qual deve ser
@@ -18,7 +22,7 @@
 
 - [x] Redux
 - [x] Firebase Firestore
-- [ ] Firebase Hosting
+- [x] Firebase Hosting
 - [x] Formik
 - [x] Material-UI ou styled-components
 - [x] React Router
