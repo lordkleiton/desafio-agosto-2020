@@ -1,6 +1,18 @@
+# Nota de esclarecimento
+
+A descrição do desafio não deixa claro qual o objetivo do uso da autenticação, seja ela para controle de acesso aos dados ou para a criação de receitas/despesas individuais para cada usuário.
+
+Sendo assim, tomei a liberdade de assumir que o sistema é um controle de gastos de uma equipe, assim permitindo que qualquer pessoa logada possa listar/criar/editar/excluir todo e qualquer registro.
+
+Caso o sistema fosse de uso pessoal para cada usuário, e assim então sendo necessário que o sistema listasse apenas os dados daquele usuário em específico, bastaria adicionar um campo de `owner` em cada entidade, adicionar um `.where('owner', '==', userId)` ou coisa similar nas requisições à firestore e pronto. Reiterando: todo mundo tem acesso a todos os dados por questões de escolha pessoal.
+
 # URL
 
 [Clique aqui](https://mario-desafio-agosto-2020.web.app)
+
+# Como rodar localmente
+
+`yarn install` e depois `yarn start`
 
 # Desafio
 
