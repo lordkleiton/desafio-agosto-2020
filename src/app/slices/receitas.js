@@ -5,6 +5,7 @@ import {
   remove as _remove,
   update as _update,
 } from "./helpers/db_services";
+import firebase from "firebase";
 
 /* config */
 
@@ -30,17 +31,32 @@ const find = () => (dispatch) => {
   _find({ model, action: addToLocal }, dispatch);
 };
 
-const create = (data) => (dispatch) => {
-  _create({ model, action: addToLocal }, dispatch);
+const create = (_data) => (dispatch) => {
+  const { valor, descricao, data, recebido } = _data;
+  const newData = _toModel(valor, descricao, data, recebido);
+
+  _create({ model, action: addToLocal, newData }, dispatch);
 };
 
 const remove = (id) => (dispatch) => {
   _remove({ model, action: removeFromLocal, id }, dispatch);
 };
 
-const update = (id) => (dispatch) => {
-  _update({ model, action: addToLocal, id }, dispatch);
+const update = (_data) => (dispatch) => {
+  const { id, valor, descricao, data, recebido } = _data;
+  const newData = _toModel(valor, descricao, data, recebido);
+
+  _update({ model, action: addToLocal, id, newData }, dispatch);
 };
+
+/* utils */
+
+const _toModel = (valor, descricao, data, recebido) => ({
+  valor: parseFloat(valor),
+  descricao,
+  data: firebase.firestore.Timestamp.fromDate(new Date(data)),
+  recebido,
+});
 
 /* exports */
 

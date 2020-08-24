@@ -8,7 +8,7 @@ import {
 } from "@material-ui/core";
 import { Formik, Form, ErrorMessage } from "formik";
 
-const CustomForm = ({ initialData, action }) => (
+const CustomForm = ({ initialData, action, despesa }) => (
   <Formik
     initialValues={initialData}
     validate={(values) => {
@@ -85,18 +85,21 @@ const CustomForm = ({ initialData, action }) => (
 
           <Grid xs={6} item>
             <FormControlLabel
-              label="Pago?"
+              label={despesa ? "Pago?" : "Recebido?"}
               control={
                 <Switch
-                  checked={values.pago}
+                  checked={despesa ? values.pago : values.recebido}
                   onChange={handleChange}
                   color="primary"
-                  name="pago"
+                  name={despesa ? "pago" : "recebido"}
                   type="checkbox"
                 />
               }
             />
-            <ErrorMessage name="pago" component="div" />
+            <ErrorMessage
+              name={despesa ? "pago" : "recebido"}
+              component="div"
+            />
           </Grid>
 
           <Grid xs={6} item></Grid>

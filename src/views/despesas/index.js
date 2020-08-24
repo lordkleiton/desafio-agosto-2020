@@ -85,6 +85,7 @@ const Despesas = () => {
         handleClose={toggleCreateDialog}
         title="Nova despesa"
         initialData={createData}
+        despesa={true}
       />
 
       <CustomDialog
@@ -95,6 +96,7 @@ const Despesas = () => {
         initialData={updateDialogData}
         handleClose={closeUpdateDialog}
         title="Atualizar despesa"
+        despesa={true}
       />
 
       <Grid container spacing={3} alignItems="center" justify="center">
@@ -116,10 +118,9 @@ const Despesas = () => {
                   {d.descricao}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  {toMoment(
-                    d.data.seconds,
-                    d.data.nanoseconds
-                  ).toLocaleString()}
+                  {toMoment(d.data.seconds, d.data.nanoseconds).format(
+                    "DD/MM/YYYY - hh:mm"
+                  )}
                 </Typography>
               </CardContent>
               <CardActions>
