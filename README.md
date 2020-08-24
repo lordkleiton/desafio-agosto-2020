@@ -20,7 +20,7 @@
 - [x] Firebase Firestore
 - [ ] Firebase Hosting
 - [ ] Formik
-- [ ] Material-UI ou styled-components
+- [x] Material-UI ou styled-components
 - [x] React Router
 
 ## Extras
