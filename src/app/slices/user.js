@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { auth } from "firebase";
+
+import * as firebase from "firebase/app";
+import "firebase/auth";
+
 import { auth as localAuth } from "../firebase";
 
 const initialState = {
@@ -25,7 +28,7 @@ const { setUser, setSignedIn, reset } = userSlice.actions;
 
 const login = (onSuccess) => (dispatch) => {
   localAuth()
-    .signInWithPopup(new auth.GoogleAuthProvider())
+    .signInWithPopup(new firebase.auth.GoogleAuthProvider())
     .then((r) => {
       dispatch(setUser(JSON.parse(JSON.stringify(r.user))));
       dispatch(setSignedIn(true));

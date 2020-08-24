@@ -5,7 +5,9 @@ import {
   remove as _remove,
   update as _update,
 } from "./helpers/db_services";
-import firebase from "firebase";
+
+import * as firebase from "firebase/app";
+import "firebase/firestore";
 
 /* config */
 
