@@ -19,7 +19,7 @@
 - [x] Redux
 - [x] Firebase Firestore
 - [ ] Firebase Hosting
-- [ ] Formik
+- [x] Formik
 - [x] Material-UI ou styled-components
 - [x] React Router
 
