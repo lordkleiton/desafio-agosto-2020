@@ -1,5 +1,4 @@
 import { firestore } from "../../firebase";
-import firebase from "firebase";
 
 const _db = (model) => firestore().collection(model);
 
@@ -17,10 +16,10 @@ const find = (data, dispatch) => {
 };
 
 const create = (data, dispatch) => {
-  const { model, action } = data;
+  const { model, action, newData } = data;
 
   _db(model)
-    .add(_toModel(10, "blablabla", new Date(), false))
+    .add(newData)
     .then((newDoc) => {
       newDoc.get().then((doc) => {
         _addDocToStore(doc, action, dispatch);
@@ -42,11 +41,11 @@ const remove = (data, dispatch) => {
 };
 
 const update = (data, dispatch) => {
-  const { model, id, action } = data;
+  const { model, id, action, newData } = data;
 
   _db(model)
     .doc(id)
-    .update(_toModel(155, "asdfmovie", new Date(), false))
+    .update(newData)
     .then(() => {
       _db(model)
         .doc(id)
@@ -70,13 +69,6 @@ const _addDocToStore = (doc, action, dispatch) => {
 };
 
 const _serialize = (data) => JSON.parse(JSON.stringify(data));
-
-const _toModel = (valor, descricao, data, pago) => ({
-  valor: parseFloat(valor),
-  descricao,
-  data: firebase.firestore.Timestamp.fromDate(data),
-  pago,
-});
 
 /* exports */
 
