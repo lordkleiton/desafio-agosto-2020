@@ -5,7 +5,7 @@ import {
   loading as _loading,
   remove,
   create,
-  //update,
+  update,
   find,
 } from "../../app/slices/despesas";
 import {
@@ -29,13 +29,15 @@ import moment from "moment";
 import { Formik, Form, ErrorMessage } from "formik";
 
 const Despesas = () => {
-  const [open, setOpen] = useState(false);
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [updateDialogOpen, setUpdateDialogOpen] = useState(false);
+  const [updateDialogData, setUpdateDialogId] = useState({});
   const dispatch = useDispatch();
   const classes = useStyles();
   const _local = useSelector(local);
   const loading = useSelector(_loading);
   const toMoment = (seconds, nanoseconds) =>
-    moment(seconds * 1000 + nanoseconds / 1000).toLocaleString();
+    moment(seconds * 1000 + nanoseconds / 1000);
 
   let data = [];
 
@@ -45,12 +47,22 @@ const Despesas = () => {
     if (v.data) data.push(v);
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const toggleCreateDialog = () => {
+    setCreateDialogOpen(!createDialogOpen);
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const openUpdateDialog = (_data) => {
+    const date = _data.data;
+    const newDate = toMoment(date.seconds, date.nanoseconds).format(
+      "YYYY-MM-DD[T]hh:mm:ss.SSS"
+    );
+
+    setUpdateDialogId(JSON.parse(JSON.stringify({ ..._data, data: newDate })));
+    setUpdateDialogOpen(true);
+  };
+  const closeUpdateDialog = () => {
+    setUpdateDialogId({});
+    setUpdateDialogOpen(false);
   };
 
   return (
@@ -66,7 +78,7 @@ const Despesas = () => {
         </Button>
       )}
 
-      <Button color="inherit" onClick={handleClickOpen}>
+      <Button color="inherit" onClick={toggleCreateDialog}>
         criar
       </Button>
 
@@ -74,9 +86,19 @@ const Despesas = () => {
         action={(values) => {
           dispatch(create(values));
         }}
-        open={open}
-        handleClose={handleClose}
+        open={createDialogOpen}
+        handleClose={toggleCreateDialog}
         title="Nova despesa"
+      />
+
+      <CustomDialog
+        action={(values) => {
+          dispatch(update(values));
+        }}
+        open={updateDialogOpen}
+        initialData={updateDialogData}
+        handleClose={closeUpdateDialog}
+        title="Atualizar despesa"
       />
 
       <Grid container spacing={3} alignItems="center" justify="center">
@@ -98,11 +120,18 @@ const Despesas = () => {
                   {d.descricao}
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                  {toMoment(d.data.seconds, d.data.nanoseconds)}
+                  {toMoment(
+                    d.data.seconds,
+                    d.data.nanoseconds
+                  ).toLocaleString()}
                 </Typography>
               </CardContent>
               <CardActions>
-                <IconButton onClick={() => {}}>
+                <IconButton
+                  onClick={() => {
+                    openUpdateDialog(d);
+                  }}
+                >
                   <Edit />
                 </IconButton>
                 <IconButton
