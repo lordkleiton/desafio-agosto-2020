@@ -8,7 +8,7 @@ Caso o sistema fosse de uso pessoal para cada usuário, e assim então sendo nec
 
 # URL
 
-[Clique aqui](https://mario-desafio-agosto-2020.web.app)
+~~[Clique aqui](https://mario-desafio-agosto-2020.web.app)~~
 
 # Como rodar localmente
 
